@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+ {% load static %}
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="color-scheme" content="light">
+    <link rel="apple-touch-icon" sizes="76x76" href="{% static '/img/apple-icon.png'%}">
+    <link rel="icon" type="image/png" href="{% static '/img/favicon.png'%}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+    <title>
+    Voisin D'Energie
+  </title>
+  <!--     Fonts and icons     -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,600,700,800" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet"> 
+  <!-- Nucleo Icons -->
+  <link href=" {% static  '/css/nucleo-icons.css'%}" rel="stylesheet" />
+  <!-- CSS Files -->
+  <link href=" {% static  '/css/black-dashboard.css'%}?v=1.0.0" rel="stylesheet"  /> 
+  <!-- CSS Just for demo purpose, don't include it in your project -->
+  <link href=" {% static '/demo/demo.css'%} " rel="stylesheet" />
+</head>
+<body class="">
+  <div class="wrapper">
+    <div class="sidebar">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red"
+    -->
+      <div class="sidebar-wrapper">
+        <div class="logo">
+  
+          <a href="javascript:void(0)" class="simple-text logo-normal">
+            Voisin D'Energie
+          </a>
+        </div>
+        <ul class="nav">
+          <li class="active ">
+            <a href="dashboard">
+              <i class="tim-icons icon-chart-pie-36"></i>
+              <p>Energie Electrique </p>
+            </a>
+          </li>
+          <li>
+            <a href="graph">
+              <i class="tim-icons icon-atom"></i>
+              <p>Comparaison Graphique</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-absolute navbar-transparent">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle d-inline">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="javascript:void(0)">Dashboard</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navigation">
+            <ul class="navbar-nav ml-auto">
+              <li class="search-bar input-group">
+                <button class="btn btn-link" id="search-button" data-toggle="modal" data-target="#searchModal"><i class="tim-icons icon-zoom-split" ></i>
+                  <span class="d-lg-none d-md-block">Search</span>
+                </button>
+              </li>
+              <li class="dropdown nav-item">
+                <a href="javascript:void(0)" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                  <div class="notification d-none d-lg-block d-xl-block"></div>
+                  <i class="tim-icons icon-sound-wave"></i>
+                  <p class="d-lg-none">
+                    Notifications
+                  </p>
+                </a>
+
+              </li>
+              <li class="dropdown nav-item">
+                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                  <div class="photo">
+                    <img src=" {% static '/img/anime3.png' %}" alt="Profile Photo">
+                  </div>
+                  <b class="caret d-none d-lg-block d-xl-block"></b>
+                  <p class="d-lg-none">
+                    Log out
+                  </p>
+                </a>
+                <ul class="dropdown-menu dropdown-navbar">
+                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Profile</a></li>
+                  <li class="nav-link"><a href="javascript:void(0)" class="nav-item dropdown-item">Settings</a></li>
+                  <li class="dropdown-divider"></li>
+                  <form action='' method='POST'>
+                  <li class="nav-link"><a href="home" class="nav-item dropdown-item">Log out</a></li>
+                </form>
+                </ul>
+              </li>
+              <li class="separator d-lg-none"></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <div class="modal modal-search fade" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchModal" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="SEARCH">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <i class="tim-icons icon-simple-remove"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End Navbar -->
+      <div class="content">
+        <div class="row">
+          <div class="col-12">
+            <div class="card card-chart">
+              <div class="card-header ">
+                <div class="row">
+                  <div class="col-sm-6 text-left">
+                    <h5 class="card-category">Comparatif Energetique </h5>
+                  </div>
+  <!-- Style du tableau  -->
+  <style>
+    .title {
+      text-align: center;
+    }
+    .container {
+      width: 80%;
+      margin: 0 auto;
+    }
+    #myChart {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div style ="float: left;">
+  <form method="post" action="/graph">
+    <h4 style="color: orange;">Choisissez un ID</h4>
+    {% csrf_token %}
+    <label for="home_id1">Home ID 1:</label>
+    <select id="home_id1" name="home_id1">
+        <option disabled selected value="">Sélectionnez votre Home ID</option>
+        <option value="CDB004" {% if selected_home_id == 'CDB004' %}selected{% endif %}>CDB004</option>
+        <option value="CDB005" {% if selected_home_id == 'CDB005' %}selected{% endif %}>CDB005</option>
+      </select>    
+    <br>
+    <label for="home_id2">Home ID 2:</label>
+    <select id="home_id2" name="home_id2">
+    <option disabled selected value="">Sélectionnez votre Home ID</option>
+    <option value="CDBA01" {% if selected_home_id == 'CDBA01' %}selected{% endif %}>CDBA01</option>
+    <option value="CDBA02" {% if selected_home_id == 'CDBA02' %}selected{% endif %}>CDBA02</option>
+  </select>  
+    </select>
+    <br>
+  </div>
+    <div style ="float: right;">
+    <h3 style="color: orange;">Choisissez une date</h3>
+    <input type="date" name="selected_date" value="{{ current_date }}">
+    <br>
+    <h4 style="color: orange;">Choisissez les données à comparer</h4>
+    <select name="data_type">
+      <option value="p_prod">Production Elec</option>
+      <option value="p_cons">Consommation Elec</option>
+      <option value="p_tot">Total Elec</option>
+    </select>
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+  </div>
+  <div id="home-id1-section">
+    <h3></h3>
+    <span id="home-id1"></span>
+  </div>
+  <div id="home-id2-section">
+    <h3>:</h3>
+    <span id="home-id2"></span>
+  </div>
+  <div class="container">
+    <canvas id="myChart"></canvas>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"></script>
+  <script>
+    // HTML element to render the chart
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    var data1FromDatabase = {{ data1|safe }};
+    var data2FromDatabase = {{ data2|safe }};
+    
+
+    // Convert the data into a format that can be used by Chart.js
+    var label1 = data1FromDatabase.map(function(item) {
+      return item.label;
+    });
+    var data1 = data1FromDatabase.map(function(item) {
+      return Math.abs(item.value); // Transforme les valeurs négatives en valeurs positives
+    });
+
+    var label2 = data2FromDatabase.map(function(item) {
+      return item.label;
+    });
+    var data2 = data2FromDatabase.map(function(item) {
+      return Math.abs(item.value); // Transforme les valeurs négatives en valeurs positives
+    });
+   
+
+    // Récupérer l'élément <span> correspondant à l'id 'home-id1'
+    var homeId1Element = document.getElementById('home-id1');
+    // Récupérer l'élément <span> correspondant à l'id 'home-id2'
+    var homeId2Element = document.getElementById('home-id2');
+    // Récupérer la valeur des home_id depuis les champs de texte
+    var homeId1Input = document.getElementById('home_id1');
+    var homeId2Input = document.getElementById('home_id2');
+
+    // Fonction pour mettre à jour la valeur des home_id dans les éléments HTML
+    function updateHomeIds() {
+      var homeId1 = homeId1Input.value;
+      var homeId2 = homeId2Input.value;
+      homeId1Element.textContent = homeId1;
+      homeId2Element.textContent = homeId2;
+    }
+
+    // Mettre à jour la valeur des home_id lorsque les champs de texte sont modifiés
+    homeId1Input.addEventListener('input', updateHomeIds);
+    homeId2Input.addEventListener('input', updateHomeIds);
+
+    // Appeler la fonction updateHomeIds pour mettre à jour les valeurs initiales des home_id
+    updateHomeIds();
+
+    // Style du Graphique 
+    var chartConfig = {
+      type: 'line',
+      data: {
+        labels: label1,label2,
+        datasets: [{
+          label: 'Home_id1',
+          data: data1,
+          backgroundColor: 'rgba(0, 204, 119, 0.3)',
+          borderColor: 'rgba(0, 204, 119, 1)',
+          borderWidth: 1,
+          lineTension: 0.3,
+          fill: false,
+          pointRadius: 0,
+          spanGaps: false,
+          yAxisID: 'y-axis-1',
+        }, {
+          label: 'Home_id2',
+          data: data2,
+          backgroundColor: 'rgba(255, 255, 0, 0.3)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          lineTension: 0.3,
+          fill: true,
+          pointRadius: 0,
+          spanGaps: false,
+          yAxisID: 'y-axis-1',
+     
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          yAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Watts'
+            },
+            ticks: {
+              beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            scaleLabel: {
+              display: true,
+              labelString: 'Day'
+            },
+            ticks: {
+              autoSkip: false
+            }
+          }]
+        },
+        legend: {
+          display: true,
+          position: 'top',
+          labels: {
+            fontColor: 'white'
+          }
+        }
+      }
+    };
+
+    // Nouveau graphique (chart)
+    var myChart = new Chart(ctx, chartConfig);
+  </script>
+</body>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <div class="fixed-plugin">
+    <div class="dropdown show-dropdown">
+      <a href="#" data-toggle="dropdown">
+        <i class="fa fa-cog fa-2x"> </i>
+      </a>
+      <ul class="dropdown-menu">
+        <li class="header-title"> Sidebar Background</li>
+        <li class="adjustments-line">
+          <a href="javascript:void(0)" class="switch-trigger background-color">
+            <div class="badge-colors text-center">
+              <span class="badge filter badge-primary active" data-color="primary"></span>
+              <span class="badge filter badge-info" data-color="blue"></span>
+              <span class="badge filter badge-success" data-color="green"></span>
+            </div>
+            <div class="clearfix"></div>
+          </a>
+        </li>
+        <li class="adjustments-line text-center color-change">
+          <span class="color-label">LIGHT MODE</span>
+          <span class="badge light-badge mr-2"></span>
+        </li>    
+  <!--   Core JS Files   -->
+  <script src=" {% static  '/js/core/jquery.min.js'%}"></script>
+  <script src=" {% static '/js/core/popper.min.js'%}"></script>
+  <script src="{% static '/js/core/bootstrap.min.js'%}"></script>
+  <script src="{% static '/js/plugins/perfect-scrollbar.jquery.min.js'%}"></script>
+  <!--  Google Maps Plugin    -->
+  <!-- Place this tag in your head or just before your close body tag. -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <!-- Chart JS -->
+  <script src="{% static '/js/plugins/chartjs.min.js'%} "></script>
+  <!--  Notifications Plugin    -->
+  <script src="{% static ' /js/plugins/bootstrap-notify.js'%}"></script>
+  <!-- Control Center for Black Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{% static '/js/black-dashboard.min.js'%}?v=1.0.0 "></script><!-- Black Dashboard DEMO methods, don't include it in your project! -->
+  <script src="{% static '/demo/demo.js'%}"></script>
+  <script>
+    $(document).ready(function() {
+      $().ready(function() {
+        $sidebar = $('.sidebar');
+        $navbar = $('.navbar');
+        $main_panel = $('.main-panel');
+
+        $full_page = $('.full-page');
+
+        $sidebar_responsive = $('body > .navbar-collapse');
+        sidebar_mini_active = true;
+        white_color = false;
+
+        window_width = $(window).width();
+
+        fixed_plugin_open = $('.sidebar .sidebar-wrapper .nav li.active a p').html();
+
+
+
+        $('.fixed-plugin a').click(function(event) {
+          if ($(this).hasClass('switch-trigger')) {
+            if (event.stopPropagation) {
+              event.stopPropagation();
+            } else if (window.event) {
+              window.event.cancelBubble = true;
+            }
+          }
+        });
+
+        $('.fixed-plugin .background-color span').click(function() {
+          $(this).siblings().removeClass('active');
+          $(this).addClass('active');
+
+          var new_color = $(this).data('color');
+
+          if ($sidebar.length != 0) {
+            $sidebar.attr('data', new_color);
+          }
+
+          if ($main_panel.length != 0) {
+            $main_panel.attr('data', new_color);
+          }
+
+          if ($full_page.length != 0) {
+            $full_page.attr('filter-color', new_color);
+          }
+
+          if ($sidebar_responsive.length != 0) {
+            $sidebar_responsive.attr('data', new_color);
+          }
+        });
+
+        $('.switch-sidebar-mini input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (sidebar_mini_active == true) {
+            $('body').removeClass('sidebar-mini');
+            sidebar_mini_active = false;
+            blackDashboard.showSidebarMessage('Sidebar mini deactivated...');
+          } else {
+            $('body').addClass('sidebar-mini');
+            sidebar_mini_active = true;
+            blackDashboard.showSidebarMessage('Sidebar mini activated...');
+          }
+
+          // we simulate the window Resize so the charts will get updated in realtime.
+          var simulateWindowResize = setInterval(function() {
+            window.dispatchEvent(new Event('resize'));
+          }, 180);
+
+          // we stop the simulation of Window Resize after the animations are completed
+          setTimeout(function() {
+            clearInterval(simulateWindowResize);
+          }, 1000);
+        });
+
+        $('.switch-change-color input').on("switchChange.bootstrapSwitch", function() {
+          var $btn = $(this);
+
+          if (white_color == true) {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').removeClass('white-content');
+            }, 900);
+            white_color = true;
+          } else {
+
+            $('body').addClass('change-background');
+            setTimeout(function() {
+              $('body').removeClass('change-background');
+              $('body').addClass('white-content');
+            }, 900);
+
+            white_color = true;
+          }
+
+
+        });
+
+        $('.light-badge').click(function() {
+          $('body').addClass('white-content');
+        });
+      });
+    });
+  </script>
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      demo.initDashboardPageCharts();
+
+    });
+  </script>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS &&
+      TrackJS.install({
+        token: "ee6fab19c5a04ac1a32a645abde4613a",
+        application: "black-dashboard-free"
+      });
+  </script>
+</body>
+</html>

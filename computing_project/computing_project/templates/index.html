@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel="icon" type="image/x-icon" href="{% static 'logo.jpg' %}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Energetica</title>
+</head>
+<body>
+    <div class="box">
+    <div class="container">
+        <div class="top">
+            <header>Sign-In</header>
+        </div>
+        <div class="input-field">
+            <form action="/index" method="POST" id="login-form">
+                {% csrf_token %}
+                <input type="text" name="login_id" class="input" placeholder="Home ID" id="login-id">
+                <i class='bx bx-user'></i>
+                <input type="password" name="password" class="input" placeholder="Password" id="password">
+                <i class='bx bx-lock-alt'></i>
+                <input type="submit" class="submit" value="Login" id="login-button">
+            </form>
+        </div>
+        <div class="two-col">
+            <div class="one">
+                <input type="checkbox" name="" id="check">
+                <label for="check">Remember Me</label>
+            </div>
+            <div class="two">
+                <label><a href="#">Forgot password?</a></label>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const loginForm = document.querySelector('#login-form');
+    const loginButton = document.querySelector('#login-button');
+
+    loginButton.addEventListener('click', (event) => {
+        event.preventDefault(); // Prevent the form from submitting normally
+
+        // Retrieve the form data
+        const homeIdInput = document.querySelector('input[name="login_id"]');
+        const passwordInput = document.querySelector('input[name="password"]');
+        const homeId = homeIdInput.value;
+        const password = passwordInput.value;
+
+        // Perform form validation
+        if (homeId.trim() === '' || password.trim() === '') {
+            alert('Please enter both Home ID and Password.');
+            return;
+        }
+        // Perform additional form validation if needed
+        // Send an AJAX request to validate the credentials
+        // Replace the URL and the AJAX request with your server-side authentication logic
+        const validationUrl = '/index'; // Replace with the URL to validate the credentials
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', validationUrl, true);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // Redirect the user to the appropriate URL
+                    const redirectUrl = window.location.origin + '/dashboard'; // Replace with your desired URL
+                    window.location.href = redirectUrl;
+                } else {
+                    alert('Invalid Home ID or Password. Please try again.');
+                }
+            }
+        };
+        // Prepare the request data
+        const formData = `login_id=${encodeURIComponent(homeId)}&password=${encodeURIComponent(password)}`;
+        // Send the request
+        xhr.send(formData);
+
+    
+</script>
+</body>
+</html>
